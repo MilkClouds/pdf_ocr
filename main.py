@@ -1,6 +1,7 @@
 from PyPDF2 import PdfReader, PdfWriter, PdfMerger
 from transformers import TrOCRProcessor
 from transformers import VisionEncoderDecoderModel
+from tqdm import tqdm
 import pytesseract, cv2
 import logging
 
@@ -19,14 +20,15 @@ def ocr(image):
     generated_text = processor.batch_decode(generated_ids, skip_special_tokens=True)[0]
     return generated_text
 
-for idx, page in enumerate(reader.pages):
+for idx in tqdm(range(reader.numPages)):
+    page = reader.pages[idx]
     for image in page.images:
         # image: .name, .data
         with open(image.name, "wb") as file:
             file.write(image.data)
         img = cv2.cvtColor(cv2.imread(image.name), cv2.COLOR_BGR2RGB)
-        text = pytesseract.image_to_string(img, lang='eng')
-        print(text)
+        # text = pytesseract.image_to_string(img, lang='eng')
+        # print(text)
         # print(ocr(img))
         pdf = pytesseract.image_to_pdf_or_hocr(img)
         with open("tmp.pdf", "wb") as file:
