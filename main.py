@@ -9,7 +9,7 @@ reader = PdfReader("../../../Downloads/1.pdf", "rb")
 merger = PdfMerger()
 processor = TrOCRProcessor.from_pretrained("microsoft/trocr-base-handwritten")
 model = VisionEncoderDecoderModel.from_pretrained("microsoft/trocr-base-handwritten")
-logging.info(f"Reading {reader.numPages}")
+logging.info(f"Reading {reader.numPages} pages")
 
 def ocr(image):
     # calling the processor is equivalent to calling the feature extractor
